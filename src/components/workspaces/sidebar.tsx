@@ -1,5 +1,12 @@
 import { cn } from "@/lib/utils";
-import { Folder, FolderHeart, FolderOpen, Plus, Trash2 } from "lucide-react";
+import {
+  Folder,
+  FolderHeart,
+  FolderOpen,
+  Plus,
+  Trash2,
+  Users2,
+} from "lucide-react";
 import Link from "next/link";
 import { Button, buttonVariants } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
@@ -46,7 +53,17 @@ export default function WorkspacesSidebar({
             </div>
           </ScrollArea>
         </div>
-        <div className="h-[150px] border-t border-border px-3 py-4 space-y-1">
+        <div className="h-[210px] border-t border-border px-3 py-4 space-y-1">
+          <Link
+            href="/workspaces/favourites"
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              "flex w-full items-center justify-start"
+            )}
+          >
+            <Users2 className="mr-2 h-4 w-4 text-current" />
+            Team Members
+          </Link>
           <Link
             href="/workspaces/favourites"
             className={cn(

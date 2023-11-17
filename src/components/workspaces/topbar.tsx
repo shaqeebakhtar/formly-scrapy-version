@@ -4,9 +4,9 @@ import { Icons } from "../icons";
 import { Button } from "../ui/button";
 import UserProfileNav from "./user-profile-nav";
 
-interface WorkSpacesHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface WorkSpacesTopbarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export default function WorkSpacesHeader({ className }: WorkSpacesHeaderProps) {
+export default function WorkSpacesTopbar({ className }: WorkSpacesTopbarProps) {
   return (
     <div
       className={cn(
