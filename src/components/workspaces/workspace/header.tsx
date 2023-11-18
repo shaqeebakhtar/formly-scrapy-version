@@ -1,3 +1,4 @@
+import CreateForm from "@/components/create-form";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,7 +18,6 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
     <div className={cn("flex items-center justify-between", className)}>
       <div className="flex space-x-4 items-center">
         <h2 className="text-xl font-semibold tracking-tight">Demo Workspace</h2>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" className="px-3 py-3">
@@ -38,10 +38,7 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
           <UserPlus2 className="mr-2 w-5 h-5" />
           Add collaborators
         </Button>
-        <Button>
-          <Plus className="mr-2 w-4 h-4" strokeWidth={3} />
-          Create form
-        </Button>
+        <CreateForm />
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { Button, buttonVariants } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
+import CreateWorkspace from "../create-workspace";
 
 interface WorkspacesSidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -24,9 +25,7 @@ export default function WorkspacesSidebar({
             <span className="font-semibold text-muted-foreground">
               Workspaces
             </span>
-            <Button variant="secondary" className="px-3 py-3">
-              <Plus className="w-5 h-5" />
-            </Button>
+            <CreateWorkspace />
           </div>
           <ScrollArea className="h-[calc(100%-3rem)] my-3">
             <div className="space-y-1">
