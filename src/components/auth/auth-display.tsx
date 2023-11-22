@@ -4,11 +4,7 @@ import { Icons } from "../icons";
 export default function AuthDisplay() {
   return (
     <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-      <div className="absolute inset-0 bg-foreground" />
-      <div className="relative z-20 flex items-center text-lg font-medium">
-        <Icons.logo className="mr-2 h-6 w-6" />
-        Formly
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-l from-blue-500 to-blue-800" />
       <div className="relative z-20 mt-auto">
         <blockquote className="space-y-2">
           <p className="text-lg">
