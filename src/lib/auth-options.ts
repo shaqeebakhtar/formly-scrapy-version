@@ -22,6 +22,29 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   callbacks: {
+    signIn: async ({ user }) => {
+      if (user && user.id) {
+        // check if there is any workspace
+        const workspaces = await prisma.workspace.findMany({
+          where: {
+            userId: user.id,
+          },
+        });
+
+        // create a demo workspace for new users
+        if (workspaces !== null) {
+          await prisma.workspace.create({
+            data: {
+              workspaceName: "Demo workspace",
+              userId: user.id,
+              isDemo: true,
+            },
+          });
+        }
+      }
+      return true;
+    },
+
     jwt: async ({ token, profile }) => {
       const user = await prisma.user.findFirst({
         where: {

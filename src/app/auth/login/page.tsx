@@ -4,6 +4,7 @@ import AuthDisplay from "@/components/auth/auth-display";
 import SkipAuth from "@/components/auth/skip-auth";
 import { UserAuthForm } from "@/components/auth/user-auth-form";
 import { Icons } from "@/components/icons";
+import ToastNotification from "@/components/toast-notification";
 
 export const metadata: Metadata = {
   title: "Formly | Login",
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <>
+      <ToastNotification />
       <div className="container h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <AuthDisplay />
         <div className="lg:p-8 h-full">
