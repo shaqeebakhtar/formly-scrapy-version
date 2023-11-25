@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,10 +11,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type UserProfileNavProps = {};
 
 export default function UserProfileNav({}: UserProfileNavProps) {
+  const router = useRouter();
+
+  const logOutUser = async () => {
+    const data = await signOut({ redirect: false, callbackUrl: "/auth/login" });
+    router.push(data.url);
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -41,7 +52,10 @@ export default function UserProfileNav({}: UserProfileNavProps) {
             <DropdownMenuItem>Help center</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-destructive focus:text-destructive focus:bg-destructive/10">
+          <DropdownMenuItem
+            className="text-destructive focus:text-destructive focus:bg-destructive/10"
+            onClick={logOutUser}
+          >
             Log out
           </DropdownMenuItem>
         </DropdownMenuContent>

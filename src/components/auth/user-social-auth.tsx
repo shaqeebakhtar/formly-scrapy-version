@@ -16,7 +16,7 @@ export default function UserSocialAuth({}: Props) {
         className="w-full"
         type="button"
         disabled={isLoading}
-        onClick={() => signIn("google")}
+        onClick={() => signIn("google", { callbackUrl: "/workspaces/demo" })}
       >
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -30,7 +30,7 @@ export default function UserSocialAuth({}: Props) {
         className="w-full"
         type="button"
         disabled={isLoading}
-        onClick={() => signIn("twitter")}
+        onClick={() => signIn("twitter", { callbackUrl: "/workspaces/demo" })}
       >
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
