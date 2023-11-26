@@ -19,13 +19,15 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-type Props = {};
+type CreateFormProps = {
+  isLoading: boolean;
+};
 
-export default function CreateForm({}: Props) {
+export default function CreateForm({ isLoading }: CreateFormProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button disabled={isLoading}>
           <Plus className="mr-2 w-4 h-4" strokeWidth={3} />
           Create form
         </Button>

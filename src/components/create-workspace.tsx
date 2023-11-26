@@ -11,13 +11,15 @@ import { Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
-type Props = {};
+type CreateWorkspaceProps = {
+  isLoading: boolean;
+};
 
-export default function CreateWorkspace({}: Props) {
+export default function CreateWorkspace({ isLoading }: CreateWorkspaceProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="secondary" className="px-3 py-3">
+        <Button variant="secondary" className="px-3 py-3" disabled={isLoading}>
           <Plus className="w-5 h-5" />
         </Button>
       </DialogTrigger>
