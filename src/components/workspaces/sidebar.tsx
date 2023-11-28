@@ -52,9 +52,9 @@ export default function WorkspacesSidebar({
                   ))
                 : workspacesQuery.isLoading && (
                     <>
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
-                      <Skeleton className="h-10 w-full" />
+                      {Array.from({ length: 6 }, (_, index) => (
+                        <Skeleton className="h-10 w-full" key={index} />
+                      ))}
                     </>
                   )}
             </div>

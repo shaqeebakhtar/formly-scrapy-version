@@ -20,10 +20,9 @@ export default function CreateFormsGroup({}: Props) {
         ))
       ) : (
         <>
-          <Skeleton className="h-24" />
-          <Skeleton className="h-24" />
-          <Skeleton className="h-24" />
-          <Skeleton className="h-24" />
+          {Array.from({ length: 15 }, (_, index) => (
+            <Skeleton className="h-24" key={index} />
+          ))}
         </>
       )}
     </div>

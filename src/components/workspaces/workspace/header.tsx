@@ -75,7 +75,10 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
           <UserPlus2 className="mr-2 w-5 h-5" />
           Add collaborators
         </Button>
-        <CreateForm isLoading={workspaceByIdQuery.isLoading} />
+        <CreateForm
+          isLoading={workspaceByIdQuery.isLoading}
+          workspaceId={params.workspaceId as string}
+        />
       </div>
     </div>
   );
