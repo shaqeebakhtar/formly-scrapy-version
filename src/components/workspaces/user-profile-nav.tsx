@@ -11,13 +11,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "next-auth/react";
+import { getInitials } from "@/lib/utils";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 type UserProfileNavProps = {};
 
 export default function UserProfileNav({}: UserProfileNavProps) {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const logOutUser = async () => {
     const data = await signOut({ redirect: false, callbackUrl: "/auth/login" });
@@ -30,8 +32,10 @@ export default function UserProfileNav({}: UserProfileNavProps) {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-9 w-9">
-              <AvatarImage src="/" alt="" />
-              <AvatarFallback className="font-semibold">SA</AvatarFallback>
+              <AvatarImage src={session?.user.image as string} alt="" />
+              <AvatarFallback className="font-semibold">
+                {getInitials(session?.user.name as string)}
+              </AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
@@ -39,10 +43,10 @@ export default function UserProfileNav({}: UserProfileNavProps) {
           <DropdownMenuLabel>
             <div className="flex flex-col space-y-2">
               <p className="text-sm font-medium leading-none capitalize">
-                shaqeeb akhtar
+                {session?.user.name}
               </p>
               <p className="text-xs font-normal leading-none text-muted-foreground">
-                shaqeebakhtar@example.com
+                {session?.user.email}
               </p>
             </div>
           </DropdownMenuLabel>

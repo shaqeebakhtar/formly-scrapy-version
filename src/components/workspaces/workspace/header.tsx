@@ -12,7 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
 import { MoreHorizontal, UserPlus2 } from "lucide-react";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
 import React from "react";
 
 interface WorkspaceHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -22,6 +22,15 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
 
   const workspaceByIdQuery = trpc.workspace.getWorkspaceById.useQuery({
     workspaceId: params.workspaceId as string,
+  });
+
+  const context = trpc.useContext();
+
+  const deleteWorkspaceMutation = trpc.workspace.deleteWorkspace.useMutation({
+    onSuccess: () => {
+      context.workspace.getWorkspaces.invalidate();
+      redirect("/workspaces/");
+    },
   });
 
   return (
@@ -50,6 +59,11 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
             <DropdownMenuItem
               className="text-destructive focus:text-destructive focus:bg-destructive/10"
               disabled={workspaceByIdQuery.data?.isDemo}
+              onClick={() =>
+                deleteWorkspaceMutation.mutate({
+                  workspaceId: params.workspaceId as string,
+                })
+              }
             >
               Delete
             </DropdownMenuItem>

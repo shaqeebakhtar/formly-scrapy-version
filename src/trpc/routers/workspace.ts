@@ -14,6 +14,12 @@ export const workspaceRouter = router({
         where: {
           userId,
         },
+        include: {
+          forms: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
       });
     } catch (error) {
       throw new TRPCError({ code: "NOT_FOUND" });
@@ -54,7 +60,7 @@ export const workspaceRouter = router({
       let createdWorkspace = null;
 
       try {
-        createdWorkspace = prisma.workspace.create({
+        createdWorkspace = await prisma.workspace.create({
           data: {
             workspaceName: input.workspaceName,
             userId,
@@ -68,12 +74,12 @@ export const workspaceRouter = router({
     }),
 
   renameWorkspace: protectedProcedure
-    .input(z.object({ workspaceId: z.string(), workspaceName: z.string() }))
+    .input(z.object({ workspaceId: z.string(), newWorkspaceName: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const userId = ctx?.user.id;
 
       // check if workspace exists
-      const workspaceExists = prisma.workspace.findFirst({
+      const workspaceExists = await prisma.workspace.findFirst({
         where: {
           id: input.workspaceId,
           userId,
@@ -82,13 +88,14 @@ export const workspaceRouter = router({
 
       let updatedWorkspace;
 
-      if (!workspaceExists == null) {
-        updatedWorkspace = prisma.workspace.update({
+      if (workspaceExists) {
+        updatedWorkspace = await prisma.workspace.update({
           where: {
             id: input.workspaceId,
+            userId,
           },
           data: {
-            workspaceName: input.workspaceName,
+            workspaceName: input.newWorkspaceName,
           },
         });
       } else {
@@ -96,5 +103,34 @@ export const workspaceRouter = router({
       }
 
       return updatedWorkspace;
+    }),
+
+  deleteWorkspace: protectedProcedure
+    .input(z.object({ workspaceId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx?.user.id;
+
+      // check if workspace exists
+      const workspaceExists = await prisma.workspace.findFirst({
+        where: {
+          id: input.workspaceId,
+          userId,
+        },
+      });
+
+      let deletedWorkspace;
+
+      if (workspaceExists) {
+        deletedWorkspace = await prisma.workspace.delete({
+          where: {
+            id: input.workspaceId,
+            userId,
+          },
+        });
+      } else {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      return deletedWorkspace;
     }),
 });
