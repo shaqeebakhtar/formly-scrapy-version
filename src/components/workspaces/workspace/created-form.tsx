@@ -13,14 +13,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Clock, MoreHorizontal } from "lucide-react";
+import { format } from "date-fns";
 
-type Props = {};
+type CreatedFormProps = {
+  form: {
+    workspaceId: string | null;
+    id: string;
+    responses: number;
+    createdAt: string;
+    updatedAt: string;
+    formName: string;
+    formType: string | null;
+  };
+};
 
-export default function CreatedForm({}: Props) {
+export default function CreatedForm({ form }: CreatedFormProps) {
   return (
     <Card className="hover:shadow-md">
       <CardHeader className="grid items-center grid-cols-[1fr_110px] gap-4 space-y-0 py-3">
-        <CardTitle className="text-lg">Form title 1</CardTitle>
+        <CardTitle className="text-lg">{form.formName}</CardTitle>
         <div className="flex items-center justify-end space-x-2 rounded-md">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -68,10 +79,12 @@ export default function CreatedForm({}: Props) {
       </CardHeader>
       <CardContent>
         <div className="flex justify-between text-sm text-muted-foreground">
-          <div>365 Responses</div>
+          <div>
+            <span>{form.responses} Responses</span>
+          </div>
           <div className="flex items-center">
             <Clock className="mr-1 h-3 w-3" />
-            Nov 17, 2023
+            {format(new Date(form.updatedAt), "MMM dd, yyyy")}
           </div>
         </div>
       </CardContent>
