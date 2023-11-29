@@ -1,5 +1,6 @@
 "use client";
-import CreateForm from "@/components/create-form";
+import CreateForm from "@/components/dialogs/create-form";
+import RenameWorkspace from "@/components/dialogs/rename-workspace";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,12 +14,13 @@ import { cn } from "@/lib/utils";
 import { trpc } from "@/utils/trpc";
 import { MoreHorizontal, UserPlus2 } from "lucide-react";
 import { redirect, useParams } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 interface WorkspaceHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
   const params = useParams();
+  const [renameOpen, setRenameOpen] = useState(false);
 
   const workspaceByIdQuery = trpc.workspace.getWorkspaceById.useQuery({
     workspaceId: params.workspaceId as string,
@@ -54,11 +56,13 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-40" align="start">
-            <DropdownMenuItem>Rename</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setRenameOpen(true)}>
+              Rename
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-destructive focus:text-destructive focus:bg-destructive/10"
-              disabled={workspaceByIdQuery.data?.isDemo}
+              disabled={workspaceByIdQuery.data?.isDemo!}
               onClick={() =>
                 deleteWorkspaceMutation.mutate({
                   workspaceId: params.workspaceId as string,
@@ -69,6 +73,12 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <RenameWorkspace
+          open={renameOpen}
+          setOpen={setRenameOpen}
+          workspaceId={params.workspaceId as string}
+          currentWorkspaceName={workspaceByIdQuery.data?.workspaceName!}
+        />
       </div>
       <div className="flex space-x-4 items-center">
         <Button variant="outline" disabled={workspaceByIdQuery.isLoading}>

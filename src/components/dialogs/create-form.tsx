@@ -22,7 +22,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -30,10 +30,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
+} from "../ui/form";
+import { Input } from "../ui/input";
 import { trpc } from "@/utils/trpc";
-import { Icons } from "./icons";
+import { Icons } from "../icons";
 
 type CreateFormProps = {
   isLoading: boolean;
@@ -53,7 +53,7 @@ export default function CreateForm({
     resolver: zodResolver(createFormSchema),
   });
 
-  const onSubmit = (values: z.infer<typeof createFormSchema>) => {
+  const onCreateForm = (values: z.infer<typeof createFormSchema>) => {
     createFormMutation.mutate(
       {
         formName: values.formName,
@@ -64,6 +64,7 @@ export default function CreateForm({
         onSuccess: () => {
           context.workspace.getWorkspaceById.invalidate();
           setOpen(false);
+          form.reset();
         },
       }
     );
@@ -83,7 +84,7 @@ export default function CreateForm({
         </DialogHeader>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onCreateForm)}
             className="space-y-6 py-4"
           >
             <FormField
@@ -104,7 +105,12 @@ export default function CreateForm({
               name="formType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Form name</FormLabel>
+                  <FormLabel>
+                    This form is for?{" "}
+                    <span className="text-xs text-muted-foreground">
+                      (optional)
+                    </span>
+                  </FormLabel>
                   <FormControl>
                     <Select
                       {...field}

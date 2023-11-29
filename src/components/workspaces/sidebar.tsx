@@ -5,7 +5,7 @@ import { trpc } from "@/utils/trpc";
 import { Folder, FolderHeart, FolderOpen, Trash2, Users2 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import CreateWorkspace from "../create-workspace";
+import CreateWorkspace from "../dialogs/create-workspace";
 import { buttonVariants } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import { Skeleton } from "../ui/skeleton";

@@ -9,7 +9,7 @@ export default function OnboardLoading() {
   const workspacesQuery = trpc.workspace.getWorkspaces.useQuery();
 
   if (workspacesQuery.isSuccess) {
-    redirect(`/workspaces/${workspacesQuery.data[0].id}`);
+    redirect(`/workspaces/${workspacesQuery.data[0]?.id}`);
   }
 
   return (

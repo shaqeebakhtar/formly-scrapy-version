@@ -13,8 +13,6 @@ export const formRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.user.id;
-
       let createdForm = null;
       try {
         createdForm = await prisma.form.create({
@@ -22,6 +20,7 @@ export const formRouter = router({
             formName: input.formName,
             formType: input.formType,
             workspaceId: input.workspaceId,
+            responses: 0,
           },
         });
       } catch (error) {

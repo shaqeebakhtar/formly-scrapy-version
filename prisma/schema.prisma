@@ -42,20 +42,21 @@ model User {
 model Workspace {
   id            String   @id @default(cuid())
   workspaceName String
-  isDemo        Boolean  @default(false)
-  user          User?    @relation(fields: [userId], references: [id])
-  userId        String?
+  isDemo        Boolean? @default(false)
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
   forms         Form[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
 
 model Form {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   formName    String
   formType    String?
-  workspace   Workspace? @relation(fields: [workspaceId], references: [id])
-  workspaceId String?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  responses   Int
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  workspaceId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
