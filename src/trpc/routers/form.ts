@@ -29,4 +29,35 @@ export const formRouter = router({
 
       return createdForm;
     }),
+
+  deleteForm: protectedProcedure
+    .input(z.object({ workspaceId: z.string(), formId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx?.user.id;
+
+      // check if workspace exists
+      const workspaceExists = await prisma.workspace.findFirst({
+        where: {
+          id: input.workspaceId,
+          userId,
+        },
+      });
+
+      // check if the form exists in that workspace
+
+      let deletedForm;
+
+      if (workspaceExists) {
+        deletedForm = await prisma.form.delete({
+          where: {
+            id: input.formId,
+            workspaceId: input.workspaceId,
+          },
+        });
+      } else {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      return deletedForm;
+    }),
 });

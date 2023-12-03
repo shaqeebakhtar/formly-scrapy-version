@@ -16,7 +16,11 @@ export default function CreateFormsGroup({}: Props) {
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {!workspaceByIdQuery.isLoading && workspaceByIdQuery.isSuccess ? (
         workspaceByIdQuery.data?.forms.map((form) => (
-          <CreatedForm key={form.id} form={form} />
+          <CreatedForm
+            key={form.id}
+            form={form}
+            workspaceId={params.workspaceId as string}
+          />
         ))
       ) : (
         <>
