@@ -1,16 +1,16 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { cn } from "@/lib/utils";
-import { DraggableProvided } from "@hello-pangea/dnd";
-import { UseListStateHandlers } from "@mantine/hooks";
-import { Copy, GripVertical, PlusCircle, Trash2 } from "lucide-react";
-import { useState } from "react";
+} from '@/components/ui/hover-card';
+import { cn } from '@/lib/utils';
+import { DraggableProvided } from '@hello-pangea/dnd';
+import { UseListStateHandlers } from '@mantine/hooks';
+import { Copy, GripVertical, PlusCircle, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 
 interface FormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
   provided: DraggableProvided;
@@ -38,10 +38,8 @@ export default function FormField({
     position: 58,
     mass: 140.12,
     symbol: Math.random().toString(),
-    name: "Temp",
+    name: 'Temp',
   };
-
-  // console.log(handlers);
 
   return (
     <HoverCard open={isOpen}>
@@ -57,16 +55,16 @@ export default function FormField({
           {...provided.draggableProps}
           className={cn(
             className,
-            "relative",
-            selected && "border border-primary"
+            'relative',
+            selected && 'border border-primary'
           )}
         >
-          <CardContent className="pt-6 pl-3 flex items-center">
+          <CardContent className="py-4 px-6 flex items-center">
             <div
               {...provided.dragHandleProps}
               className={cn(
-                "absolute -left-6 opacity-0 pointer-events-none",
-                selected && "opacity-100 pointer-events-auto"
+                'absolute -left-6 opacity-0 pointer-events-none',
+                selected && 'opacity-100 pointer-events-auto'
               )}
             >
               <GripVertical className="w-4 h-4 test-muted-foreground" />
@@ -78,7 +76,7 @@ export default function FormField({
       <HoverCardContent side="right" align="start" className="w-auto p-2">
         <div className="grid">
           <Button
-            variant={"ghost"}
+            variant={'ghost'}
             className="text-muted-foreground py-1.5 px-2"
             onClick={() => {
               handlers.insert(index + 1, temp);
@@ -87,10 +85,10 @@ export default function FormField({
             <PlusCircle className="w-5 h-5" />
           </Button>
           <Button
-            variant={"ghost"}
+            variant={'ghost'}
             className="text-muted-foreground py-1.5 px-2"
             onClick={() => {
-              let temp = { ...item, ["symbol"]: Math.random().toString() };
+              let temp = { ...item, ['symbol']: Math.random().toString() };
 
               handlers.insert(index + 1, temp);
             }}
@@ -98,7 +96,7 @@ export default function FormField({
             <Copy className="w-5 h-5" />
           </Button>
           <Button
-            variant={"ghost"}
+            variant={'ghost'}
             className="text-destructive/80 hover:text-destructive hover:bg-destructive/10 py-1.5 px-2"
             onClick={() => {
               handlers.remove(index);
