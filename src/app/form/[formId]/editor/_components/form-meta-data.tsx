@@ -15,7 +15,7 @@ export default function FormMetaData({ className }: FormMetaDataProps) {
 
   return (
     <Card className={cn(className, 'max-w-xl mx-auto')}>
-      <CardHeader>
+      <CardHeader className="space-y-2">
         <CardTitle>{formTitle}</CardTitle>
         <CardDescription>{formDescription}</CardDescription>
       </CardHeader>

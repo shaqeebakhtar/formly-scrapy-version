@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import { Icons } from "@/components/icons";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import * as React from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Button } from "../ui/button";
+import { Icons } from '@/components/icons';
+import { authSchema } from '@/schemas/auth';
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
+import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { Button } from '../ui/button';
 import {
   Form,
   FormControl,
@@ -14,22 +15,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import UserSocialAuth from "./user-social-auth";
-
-const authSchema = z.object({
-  email: z
-    .string({ required_error: "Email cannot be empty" })
-    .email({ message: "Please use a valid email" }),
-  password: z
-    .string({ required_error: "Password cannot be empty" })
-    .min(8, { message: "Password must be atleast 8 characters" })
-    .max(16, { message: "Password maximum can be of 16 characters" }),
-});
+} from '../ui/form';
+import { Input } from '../ui/input';
+import UserSocialAuth from './user-social-auth';
 
 type UserAuthFormProps = {
-  formType: "login" | "signup";
+  formType: 'login' | 'signup';
 };
 
 export function UserAuthForm({ formType }: UserAuthFormProps) {
@@ -96,13 +87,13 @@ export function UserAuthForm({ formType }: UserAuthFormProps) {
                 {isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                {formType === "signup"
-                  ? "Signup with Email"
-                  : "Login with Email"}
+                {formType === 'signup'
+                  ? 'Signup with Email'
+                  : 'Login with Email'}
               </Button>
-              {formType === "signup" ? (
+              {formType === 'signup' ? (
                 <p className="text-right text-sm text-muted-foreground">
-                  Already have an account?{" "}
+                  Already have an account?{' '}
                   <Link
                     href="/auth/login"
                     className="underline underline-offset-4 hover:text-primary"
@@ -112,7 +103,7 @@ export function UserAuthForm({ formType }: UserAuthFormProps) {
                 </p>
               ) : (
                 <p className="text-right text-sm text-muted-foreground">
-                  Don&apos;t have an account?{" "}
+                  Don&apos;t have an account?{' '}
                   <Link
                     href="/auth/signup"
                     className="underline underline-offset-4 hover:text-primary"

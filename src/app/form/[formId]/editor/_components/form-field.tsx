@@ -11,16 +11,20 @@ import { DraggableProvided } from '@hello-pangea/dnd';
 import { UseListStateHandlers } from '@mantine/hooks';
 import { Copy, GripVertical, PlusCircle, Trash2 } from 'lucide-react';
 import { useState } from 'react';
+import ShortText from './fields/short-text';
+import Number from './fields/number';
+import Dropdown from './fields/dropdown';
+import MultipleChoice from './fields/multiple-choice';
+import LongText from './fields/long-text';
 
 interface FormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
   provided: DraggableProvided;
-  item: { position: number; mass: number; symbol: string; name: string };
+  item: { fieldId: string; fieldQuestion: string; fieldType: string };
   index: number;
   handlers: UseListStateHandlers<{
-    position: number;
-    mass: number;
-    symbol: string;
-    name: string;
+    fieldId: string;
+    fieldQuestion: string;
+    fieldType: string;
   }>;
 }
 
@@ -35,10 +39,9 @@ export default function FormField({
   const [isOpen, setIsOpen] = useState(false);
 
   const temp = {
-    position: 58,
-    mass: 140.12,
-    symbol: Math.random().toString(),
-    name: 'Temp',
+    fieldId: Math.random().toString(),
+    fieldQuestion: 'Untitled Question - Add',
+    fieldType: 'shortText',
   };
 
   return (
@@ -69,7 +72,7 @@ export default function FormField({
             >
               <GripVertical className="w-4 h-4 test-muted-foreground" />
             </div>
-            <div>{item.name}</div>
+            <MultipleChoice item={item} />
           </CardContent>
         </Card>
       </HoverCardTrigger>
@@ -88,7 +91,7 @@ export default function FormField({
             variant={'ghost'}
             className="text-muted-foreground py-1.5 px-2"
             onClick={() => {
-              let temp = { ...item, ['symbol']: Math.random().toString() };
+              let temp = { ...item, ['fieldId']: Math.random().toString() };
 
               handlers.insert(index + 1, temp);
             }}

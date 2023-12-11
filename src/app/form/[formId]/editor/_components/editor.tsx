@@ -12,17 +12,15 @@ import { useEditorFormStore } from '@/store/editor-form-store';
 
 interface EditorProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-// const data = ;
-
 export default function Editor({ className }: EditorProps) {
-  const [data, setData] = useState([
-    { position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },
-    { position: 7, mass: 14.007, symbol: 'N', name: 'Nitrogen' },
-    { position: 39, mass: 88.906, symbol: 'Y', name: 'Yttrium' },
-    { position: 56, mass: 137.33, symbol: 'Ba', name: 'Barium' },
-    { position: 58, mass: 140.12, symbol: 'Ce', name: 'Cerium' },
+  const [formFields, setFormFields] = useState([
+    {
+      fieldId: '123',
+      fieldQuestion: 'Untitled Question',
+      fieldType: 'shortText',
+    },
   ]);
-  const [state, handlers] = useListState(data);
+  const [state, handlers] = useListState(formFields);
 
   const { formSubmitText } = useEditorFormStore((state) => state);
   const { buttonAlignment } = useEditorFormStore((state) => state);
@@ -49,9 +47,9 @@ export default function Editor({ className }: EditorProps) {
                 >
                   {state.map((item, index) => (
                     <Draggable
-                      key={item.symbol}
+                      key={item.fieldId}
                       index={index}
-                      draggableId={item.symbol}
+                      draggableId={item.fieldId}
                     >
                       {(provided) => (
                         <FormField
