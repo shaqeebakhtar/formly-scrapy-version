@@ -1,29 +1,28 @@
 'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
+import { useEditorFormStore } from '@/store/editor-form-store';
+import { useFormFields } from '@/store/form-fields';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { useListState } from '@mantine/hooks';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import FormField from './form-field';
 import FormMetaData from './form-meta-data';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useEditorFormStore } from '@/store/editor-form-store';
 
 interface EditorProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function Editor({ className }: EditorProps) {
-  const [formFields, setFormFields] = useState([
-    {
-      fieldId: '123',
-      fieldQuestion: 'Untitled Question',
-      fieldType: 'shortText',
-    },
-  ]);
+  const { formFields, setFormFields } = useFormFields((state) => state);
   const [state, handlers] = useListState(formFields);
 
   const { formSubmitText } = useEditorFormStore((state) => state);
   const { buttonAlignment } = useEditorFormStore((state) => state);
+
+  useEffect(() => {
+    setFormFields(state);
+  }, [state, setFormFields]);
 
   return (
     <ScrollArea className={cn('w-full h-[calc(100vh-64px)]', className)}>
@@ -45,7 +44,7 @@ export default function Editor({ className }: EditorProps) {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {state.map((item, index) => (
+                  {formFields.map((item, index) => (
                     <Draggable
                       key={item.fieldId}
                       index={index}
