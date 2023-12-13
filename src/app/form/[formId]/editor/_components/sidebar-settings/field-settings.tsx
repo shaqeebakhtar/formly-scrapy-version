@@ -10,12 +10,25 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { useFormFields } from '@/store/form-fields';
 import { useSelectedField } from '@/store/selected-field';
+import LongTextSettings from './long-text-settings';
+import ShortTextSettings from './short-text-settings';
+import EmailSettings from './email-settings';
+import NumberSettings from './number-settings';
+import MultiplechoiceSettings from './multiplechoice-settings';
+import DropdownSettings from './dropdown-settings';
 
 export default function FieldSettings() {
-  const { selectedField, setSelectedFieldType } = useSelectedField(
-    (state) => state
-  );
+  const { selectedField } = useSelectedField((state) => state);
   const { formFields, setFormFields } = useFormFields((state) => state);
+
+  const fieldSettings = {
+    shortText: <ShortTextSettings />,
+    longText: <LongTextSettings />,
+    multipleChoice: <MultiplechoiceSettings />,
+    email: <EmailSettings />,
+    dropdown: <DropdownSettings />,
+    number: <NumberSettings />,
+  };
 
   return (
     <>
@@ -59,6 +72,7 @@ export default function FieldSettings() {
         </div>
       </div>
       <Separator className="my-4" />
+      {fieldSettings[selectedField?.fieldType as keyof typeof fieldSettings]}
     </>
   );
 }
