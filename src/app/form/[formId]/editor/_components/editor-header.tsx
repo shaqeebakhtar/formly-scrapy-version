@@ -1,8 +1,8 @@
-import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { Eye } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Eye } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 
 interface EditorHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -10,7 +10,7 @@ export default function EditorHeader({ className }: EditorHeaderProps) {
   return (
     <div
       className={cn(
-        "flex items-center justify-between border-b border-border px-4 py-3 lg:px-8 bg-white",
+        'flex items-center justify-between border-b border-border px-4 py-3 lg:px-8 bg-white',
         className
       )}
     >
@@ -24,33 +24,36 @@ export default function EditorHeader({ className }: EditorHeaderProps) {
 
       <div className="space-x-2 text-sm text-muted-foreground">
         <Link
-          href={"create"}
+          href={'create'}
           className={cn(
-            buttonVariants({ variant: "ghost" }),
-            "bg-primary/10 text-primary font-semibold"
+            buttonVariants({ variant: 'ghost' }),
+            'bg-primary/10 text-primary font-semibold'
           )}
         >
           Editor
         </Link>
         <Link
-          href={"responses"}
-          className={cn(buttonVariants({ variant: "ghost" }))}
+          href={'responses'}
+          className={cn(buttonVariants({ variant: 'ghost' }))}
         >
           Responses
         </Link>
         <Link
-          href={"settings"}
-          className={cn(buttonVariants({ variant: "ghost" }))}
+          href={'settings'}
+          className={cn(buttonVariants({ variant: 'ghost' }))}
         >
           Settings
         </Link>
       </div>
 
       <div className="flex items-center space-x-3">
-        <Button variant="outline">
+        <Link
+          href={'preview'}
+          className={cn(buttonVariants({ variant: 'outline' }))}
+        >
           <Eye className="w-5 h-5 mr-2 text-muted-foreground" />
           Preview
-        </Button>
+        </Link>
         <Button>Publish</Button>
       </div>
     </div>
