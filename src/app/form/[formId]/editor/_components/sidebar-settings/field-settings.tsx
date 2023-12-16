@@ -18,7 +18,9 @@ import MultiplechoiceSettings from './multiplechoice-settings';
 import DropdownSettings from './dropdown-settings';
 
 export default function FieldSettings() {
-  const { selectedField } = useSelectedField((state) => state);
+  const { selectedField, setSelectedFieldType } = useSelectedField(
+    (state) => state
+  );
   const { formFields, setFormFields } = useFormFields((state) => state);
 
   const fieldSettings = {
@@ -36,14 +38,9 @@ export default function FieldSettings() {
         <div className="grid space-y-2">
           <Label htmlFor="type">Type</Label>
           <Select
-            value={
-              formFields.filter((field) => {
-                if (selectedField?.fieldId === field.fieldId) {
-                  return field.fieldType;
-                }
-              })[0]?.fieldType
-            }
+            value={selectedField?.fieldType}
             onValueChange={(newType) => {
+              setSelectedFieldType(newType);
               const newFormFields = formFields.map((field) => {
                 if (selectedField?.fieldId === field.fieldId) {
                   return { ...field, fieldType: newType };

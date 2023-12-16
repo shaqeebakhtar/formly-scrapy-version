@@ -6,12 +6,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import React from 'react';
 
 type DropdownProps = {
   item: {
     fieldId: string;
     fieldQuestion: string;
     fieldType: string;
+    required?: boolean;
+    placeholder?: string;
+    rows?: number;
+    minChars?: number;
+    maxChars?: number;
+    options?: string[];
   };
 };
 
@@ -21,11 +28,14 @@ export default function Dropdown({ item }: DropdownProps) {
       <Label>{item.fieldQuestion}</Label>
       <Select>
         <SelectTrigger>
-          <SelectValue />
+          <SelectValue placeholder={item.placeholder} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="option-one">Option 1</SelectItem>
-          <SelectItem value="option-two">Option 2</SelectItem>
+          {item.options?.map((option, idx) => (
+            <SelectItem key={idx} value={option}>
+              {option}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
     </div>
