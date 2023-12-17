@@ -1,12 +1,17 @@
+'use client';
+
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Eye } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface EditorHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function EditorHeader({ className }: EditorHeaderProps) {
+  const router = useRouter();
+
   return (
     <div
       className={cn(
@@ -47,13 +52,10 @@ export default function EditorHeader({ className }: EditorHeaderProps) {
       </div>
 
       <div className="flex items-center space-x-3">
-        <Link
-          href={'preview'}
-          className={cn(buttonVariants({ variant: 'outline' }))}
-        >
+        <Button variant={'outline'} onClick={() => router.push('preview')}>
           <Eye className="w-5 h-5 mr-2 text-muted-foreground" />
           Preview
-        </Link>
+        </Button>
         <Button>Publish</Button>
       </div>
     </div>
