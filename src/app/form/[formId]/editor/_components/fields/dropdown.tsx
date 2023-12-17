@@ -31,7 +31,7 @@ export default function Dropdown({ item }: DropdownProps) {
           <SelectValue placeholder={item.placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {item.options?.map((option, idx) => (
+          {(item.options || ['Option 1', 'Option 2'])?.map((option, idx) => (
             <SelectItem key={idx} value={option}>
               {option}
             </SelectItem>
