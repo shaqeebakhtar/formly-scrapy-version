@@ -2,15 +2,42 @@
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useEditorFormStore } from '@/store/editor-form-store';
+import { useFormFields } from '@/store/form-fields';
+import { trpc } from '@/utils/trpc';
 import { Eye } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 
 interface EditorHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function EditorHeader({ className }: EditorHeaderProps) {
   const router = useRouter();
+  const params = useParams();
+  const { formTitle, formDescription, formSubmitText, buttonAlignment } =
+    useEditorFormStore((state) => state);
+  const { formFields } = useFormFields((state) => state);
+
+  const publishForm = trpc.form.addFormDetails.useMutation();
+
+  const handlePublishForm = () => {
+    publishForm.mutate(
+      {
+        formId: params.formId as string,
+        formTitle,
+        formDescription,
+        formSubmitText,
+        buttonAlignment,
+        fields: formFields,
+      },
+      {
+        onSuccess: () => {
+          console.log('updated');
+        },
+      }
+    );
+  };
 
   return (
     <div
@@ -56,7 +83,7 @@ export default function EditorHeader({ className }: EditorHeaderProps) {
           <Eye className="w-5 h-5 mr-2 text-muted-foreground" />
           Preview
         </Button>
-        <Button>Publish</Button>
+        <Button onClick={() => handlePublishForm()}>Publish</Button>
       </div>
     </div>
   );

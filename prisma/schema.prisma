@@ -54,7 +54,7 @@ model Form {
   id          String    @id @default(cuid())
   formName    String
   formType    String?
-  responses   Int
+  formFields  Json?
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
   workspaceId String
   createdAt   DateTime  @default(now())
