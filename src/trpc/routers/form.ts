@@ -1,7 +1,8 @@
 import { TRPCError } from '@trpc/server';
-import { protectedProcedure, router } from '../procedures';
+import { protectedProcedure, publicProcedure, router } from '../procedures';
 import * as z from 'zod';
 import prisma from '@/lib/db';
+import { Prisma } from '@prisma/client';
 
 export const formRouter = router({
   createForm: protectedProcedure
@@ -104,8 +105,8 @@ export const formRouter = router({
               formDescription: input.formDescription,
               formSubmitText: input.formSubmitText,
               buttonAlignment: input.buttonAlignment,
-              fields: input.fields,
-            },
+              fields: input.fields as Prisma.JsonArray,
+            } as Prisma.JsonObject,
           },
         });
       } else {
@@ -113,5 +114,17 @@ export const formRouter = router({
       }
 
       return updatedForm;
+    }),
+
+  getFormDetails: publicProcedure
+    .input(z.object({ formId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const formDetails = await prisma.form.findFirst({
+        where: {
+          id: input.formId,
+        },
+      });
+
+      return JSON.stringify(formDetails?.formFields);
     }),
 });
