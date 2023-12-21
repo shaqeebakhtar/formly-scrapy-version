@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
+import { camelizeText, cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -40,9 +40,9 @@ type LiveFormMainProps = {
   }[];
 };
 
-const formSchema = z.object({
-  username: z.string(),
-});
+let formSchemaObj: z.ZodRawShape = {};
+
+const formSchema = z.object(formSchemaObj);
 
 export default function LiveFormMain({
   buttonAlignment,
@@ -57,6 +57,25 @@ export default function LiveFormMain({
     console.log(values);
   }
 
+  const createSchema = (question: string, type: string) => {
+    const camelCaseQuestion = camelizeText(question);
+
+    const zodType =
+      type === 'number'
+        ? z.number()
+        : type === 'email'
+        ? z.string().email()
+        : z.string();
+
+    formSchemaObj[camelCaseQuestion as keyof typeof formSchemaObj] = zodType;
+  };
+
+  formFields?.forEach((field) => {
+    createSchema(field.fieldQuestion, field.fieldType);
+  });
+
+  console.log(formSchemaObj);
+
   return (
     <div className="max-w-xl mx-auto my-4">
       <Form {...form}>
@@ -66,7 +85,7 @@ export default function LiveFormMain({
               <CardContent className="py-4 px-6 flex items-center">
                 <FormField
                   control={form.control}
-                  name="username"
+                  name={camelizeText(formField.fieldQuestion)}
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>{formField.fieldQuestion}</FormLabel>
@@ -90,7 +109,10 @@ export default function LiveFormMain({
                             {...field}
                           />
                         ) : formField.fieldType === 'dropdown' ? (
-                          <Select>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
                             <SelectTrigger>
                               <SelectValue
                                 placeholder={formField.placeholder}
@@ -108,8 +130,9 @@ export default function LiveFormMain({
                           </Select>
                         ) : formField.fieldType === 'multipleChoice' ? (
                           <RadioGroup
-                            defaultValue="option-one"
                             className="space-y-2"
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
                           >
                             {(
                               formField.options || ['Option 1', 'Option 2']
