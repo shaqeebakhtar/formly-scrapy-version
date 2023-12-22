@@ -127,4 +127,22 @@ export const formRouter = router({
 
       return JSON.stringify(formDetails?.formFields);
     }),
+
+  saveFormResponse: publicProcedure
+    .input(
+      z.object({
+        formId: z.string(),
+        response: z.any(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const savedResponse = await prisma.response.create({
+        data: {
+          formId: input.formId,
+          response: input.response,
+        },
+      });
+
+      return savedResponse;
+    }),
 });

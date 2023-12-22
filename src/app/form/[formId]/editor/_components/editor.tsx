@@ -17,6 +17,9 @@ interface EditorProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function Editor({ className }: EditorProps) {
   const { formFields, setFormFields } = useFormFields((state) => state);
+  const { setFormTitle, setFormDescription } = useEditorFormStore(
+    (state) => state
+  );
 
   const params = useParams();
 
@@ -27,9 +30,19 @@ export default function Editor({ className }: EditorProps) {
   useEffect(() => {
     if (formDetailsQuery.isSuccess && formDetailsQuery.data) {
       const formDetails = JSON.parse(formDetailsQuery.data);
-      if (formDetails && formDetails.fields) setFormFields(formDetails?.fields);
+      if (formDetails && formDetails.fields) {
+        setFormTitle(formDetails.formTitle);
+        setFormDescription(formDetails.formDescription);
+        setFormFields(formDetails?.fields);
+      }
     }
-  }, [setFormFields, formDetailsQuery.data, formDetailsQuery.isSuccess]);
+  }, [
+    setFormFields,
+    formDetailsQuery.data,
+    formDetailsQuery.isSuccess,
+    setFormTitle,
+    setFormDescription,
+  ]);
 
   const [state, handlers] = useListState(formFields);
 

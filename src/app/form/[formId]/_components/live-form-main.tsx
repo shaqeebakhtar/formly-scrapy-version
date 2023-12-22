@@ -23,8 +23,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Label } from '@/components/ui/label';
+import { trpc } from '@/utils/trpc';
 
 type LiveFormMainProps = {
+  formId: string;
   buttonAlignment?: string;
   formSubmitText?: string;
   formFields?: {
@@ -42,23 +44,45 @@ type LiveFormMainProps = {
 
 let formSchemaObj: z.ZodRawShape = {};
 
+let camelQuestionsMap: any = {};
+
 const formSchema = z.object(formSchemaObj);
 
 export default function LiveFormMain({
   buttonAlignment,
   formSubmitText,
   formFields,
+  formId,
 }: LiveFormMainProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
+  const submitResponseMutation = trpc.form.saveFormResponse.useMutation({
+    onSuccess: () => {
+      console.log('success');
+    },
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    const response: any = {};
+
+    for (const key in values) {
+      if (values.hasOwnProperty(key)) {
+        response[camelQuestionsMap[key]] = values[key];
+      }
+    }
+
+    submitResponseMutation.mutate({
+      response,
+      formId,
+    });
   }
 
   const createSchema = (question: string, type: string) => {
     const camelCaseQuestion = camelizeText(question);
+    camelQuestionsMap[camelCaseQuestion as keyof typeof camelQuestionsMap] =
+      question;
 
     const zodType =
       type === 'number'
@@ -73,8 +97,6 @@ export default function LiveFormMain({
   formFields?.forEach((field) => {
     createSchema(field.fieldQuestion, field.fieldType);
   });
-
-  console.log(formSchemaObj);
 
   return (
     <div className="max-w-xl mx-auto my-4">
@@ -104,7 +126,6 @@ export default function LiveFormMain({
                           />
                         ) : formField.fieldType === 'email' ? (
                           <Input
-                            type="email"
                             placeholder={formField.placeholder}
                             {...field}
                           />

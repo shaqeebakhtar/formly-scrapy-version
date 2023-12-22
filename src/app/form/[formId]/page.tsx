@@ -50,6 +50,7 @@ export default function LiveForm({}: LiveFormProps) {
               formDescription={formDetails?.formDescription!}
             />
             <LiveFormMain
+              formId={params.formId as string}
               formFields={formDetails?.fields!}
               buttonAlignment={formDetails?.buttonAlignment}
               formSubmitText={formDetails?.formSubmitText}
