@@ -58,7 +58,7 @@ export const workspaceRouter = router({
         throw new TRPCError({ code: 'NOT_FOUND' });
       }
 
-      return workspace;
+      return JSON.stringify(workspace);
     }),
 
   createWorkspace: protectedProcedure

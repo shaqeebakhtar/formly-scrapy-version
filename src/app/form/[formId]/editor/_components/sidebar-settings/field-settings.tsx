@@ -10,6 +10,12 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { useFormFields } from '@/store/form-fields';
 import { useSelectedField } from '@/store/selected-field';
+import LongTextSettings from './long-text-settings';
+import ShortTextSettings from './short-text-settings';
+import EmailSettings from './email-settings';
+import NumberSettings from './number-settings';
+import MultiplechoiceSettings from './multiplechoice-settings';
+import DropdownSettings from './dropdown-settings';
 
 export default function FieldSettings() {
   const { selectedField, setSelectedFieldType } = useSelectedField(
@@ -17,20 +23,24 @@ export default function FieldSettings() {
   );
   const { formFields, setFormFields } = useFormFields((state) => state);
 
+  const fieldSettings = {
+    shortText: <ShortTextSettings />,
+    longText: <LongTextSettings />,
+    multipleChoice: <MultiplechoiceSettings />,
+    email: <EmailSettings />,
+    dropdown: <DropdownSettings />,
+    number: <NumberSettings />,
+  };
+
   return (
     <>
       <div className="grid space-y-6 px-4 py-2">
         <div className="grid space-y-2">
           <Label htmlFor="type">Type</Label>
           <Select
-            value={
-              formFields.filter((field) => {
-                if (selectedField?.fieldId === field.fieldId) {
-                  return field.fieldType;
-                }
-              })[0]?.fieldType
-            }
+            value={selectedField?.fieldType}
             onValueChange={(newType) => {
+              setSelectedFieldType(newType);
               const newFormFields = formFields.map((field) => {
                 if (selectedField?.fieldId === field.fieldId) {
                   return { ...field, fieldType: newType };
@@ -59,6 +69,7 @@ export default function FieldSettings() {
         </div>
       </div>
       <Separator className="my-4" />
+      {fieldSettings[selectedField?.fieldType as keyof typeof fieldSettings]}
     </>
   );
 }

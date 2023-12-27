@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,18 +13,17 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Clock, MoreHorizontal } from "lucide-react";
-import { format } from "date-fns";
-import { trpc } from "@/utils/trpc";
-import Link from "next/link";
-import React from "react";
+} from '@/components/ui/dropdown-menu';
+import { Clock, MoreHorizontal } from 'lucide-react';
+import { format } from 'date-fns';
+import { trpc } from '@/utils/trpc';
+import Link from 'next/link';
+import React from 'react';
 
 type CreatedFormProps = {
   form: {
     workspaceId: string | null;
     id: string;
-    responses: number;
     createdAt: string;
     updatedAt: string;
     formName: string;
@@ -107,11 +106,11 @@ export default function CreatedForm({ form, workspaceId }: CreatedFormProps) {
         <CardContent>
           <div className="flex justify-between text-sm text-muted-foreground">
             <div>
-              <span>{form.responses} Responses</span>
+              <span>0 Responses</span>
             </div>
             <div className="flex items-center">
               <Clock className="mr-1 h-3 w-3" />
-              {format(new Date(form.updatedAt), "MMM dd, yyyy")}
+              {format(new Date(form.updatedAt), 'MMM dd, yyyy')}
             </div>
           </div>
         </CardContent>
