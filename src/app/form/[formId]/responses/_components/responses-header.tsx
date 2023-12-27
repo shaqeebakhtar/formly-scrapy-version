@@ -2,42 +2,16 @@
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useEditorFormStore } from '@/store/editor-form-store';
-import { useFormFields } from '@/store/form-fields';
-import { trpc } from '@/utils/trpc';
-import { Eye } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import React from 'react';
 
 interface EditorHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export default function EditorHeader({ className }: EditorHeaderProps) {
+export default function ResponsesHeader({ className }: EditorHeaderProps) {
   const router = useRouter();
   const params = useParams();
-  const { formTitle, formDescription, formSubmitText, buttonAlignment } =
-    useEditorFormStore((state) => state);
-  const { formFields } = useFormFields((state) => state);
-
-  const publishForm = trpc.form.addFormDetails.useMutation();
-
-  const handlePublishForm = () => {
-    publishForm.mutate(
-      {
-        formId: params.formId as string,
-        formTitle,
-        formDescription,
-        formSubmitText,
-        buttonAlignment,
-        fields: formFields,
-      },
-      {
-        onSuccess: () => {
-          console.log('updated');
-        },
-      }
-    );
-  };
 
   return (
     <div
@@ -57,16 +31,16 @@ export default function EditorHeader({ className }: EditorHeaderProps) {
       <div className="space-x-2 text-sm text-muted-foreground">
         <Link
           href={'editor'}
-          className={cn(
-            buttonVariants({ variant: 'ghost' }),
-            'bg-primary/10 text-primary font-semibold'
-          )}
+          className={cn(buttonVariants({ variant: 'ghost' }))}
         >
           Editor
         </Link>
         <Link
           href={'responses'}
-          className={cn(buttonVariants({ variant: 'ghost' }))}
+          className={cn(
+            buttonVariants({ variant: 'ghost' }),
+            'bg-primary/10 text-primary font-semibold'
+          )}
         >
           Responses
         </Link>
@@ -79,11 +53,13 @@ export default function EditorHeader({ className }: EditorHeaderProps) {
       </div>
 
       <div className="flex items-center space-x-3">
-        <Button variant={'outline'} onClick={() => router.push('preview')}>
-          <Eye className="w-5 h-5 mr-2 text-muted-foreground" />
-          Preview
+        <Button
+          variant={'outline'}
+          onClick={() => router.push(`/form/${params.formId}`)}
+        >
+          <ExternalLink className="w-5 h-5 mr-2 text-muted-foreground" />
+          View Live
         </Button>
-        <Button onClick={() => handlePublishForm()}>Publish</Button>
       </div>
     </div>
   );
