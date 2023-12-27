@@ -1,24 +1,30 @@
-"use client";
-import CreateForm from "@/components/dialogs/create-form";
-import RenameWorkspace from "@/components/dialogs/rename-workspace";
-import { Button } from "@/components/ui/button";
+'use client';
+import CreateForm from '@/components/dialogs/create-form';
+import RenameWorkspace from '@/components/dialogs/rename-workspace';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "@/lib/utils";
-import { trpc } from "@/utils/trpc";
-import { MoreHorizontal, UserPlus2 } from "lucide-react";
-import { redirect, useParams } from "next/navigation";
-import React, { useState } from "react";
+} from '@/components/ui/dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton';
+import { cn } from '@/lib/utils';
+import { trpc } from '@/utils/trpc';
+import { Prisma } from '@prisma/client';
+import { MoreHorizontal, UserPlus2 } from 'lucide-react';
+import { redirect, useParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 
 interface WorkspaceHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
+  const [workspace, setWorkspace] = useState<{
+    id: string;
+    workspaceName: string;
+    isDemo: boolean;
+  }>();
   const params = useParams();
   const [renameOpen, setRenameOpen] = useState(false);
 
@@ -31,16 +37,26 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
   const deleteWorkspaceMutation = trpc.workspace.deleteWorkspace.useMutation({
     onSuccess: () => {
       context.workspace.getWorkspaces.invalidate();
-      redirect("/workspaces/");
+      redirect('/workspaces/');
     },
   });
 
+  useEffect(() => {
+    if (!workspaceByIdQuery.isLoading && workspaceByIdQuery.isSuccess) {
+      setWorkspace(JSON.parse(workspaceByIdQuery.data));
+    }
+  }, [
+    workspaceByIdQuery.data,
+    workspaceByIdQuery.isLoading,
+    workspaceByIdQuery.isSuccess,
+  ]);
+
   return (
-    <div className={cn("flex items-center justify-between", className)}>
+    <div className={cn('flex items-center justify-between', className)}>
       <div className="flex space-x-4 items-center">
         {!workspaceByIdQuery.isLoading && workspaceByIdQuery.isSuccess ? (
           <h2 className="text-xl font-semibold tracking-tight">
-            {workspaceByIdQuery.data?.workspaceName}
+            {workspace?.workspaceName}
           </h2>
         ) : (
           <Skeleton className="h-8 w-[200px]" />
@@ -62,7 +78,7 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="text-destructive focus:text-destructive focus:bg-destructive/10"
-              disabled={workspaceByIdQuery.data?.isDemo!}
+              disabled={workspace?.isDemo!}
               onClick={() =>
                 deleteWorkspaceMutation.mutate({
                   workspaceId: params.workspaceId as string,
@@ -77,7 +93,7 @@ export default function WorkspaceHeader({ className }: WorkspaceHeaderProps) {
           open={renameOpen}
           setOpen={setRenameOpen}
           workspaceId={params.workspaceId as string}
-          currentWorkspaceName={workspaceByIdQuery.data?.workspaceName!}
+          currentWorkspaceName={workspace?.workspaceName!}
         />
       </div>
       <div className="flex space-x-4 items-center">
