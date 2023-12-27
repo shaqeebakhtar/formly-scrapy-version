@@ -1,7 +1,7 @@
-import prisma from "@/lib/db";
-import { protectedProcedure, router } from "../procedures";
-import * as z from "zod";
-import { TRPCError } from "@trpc/server";
+import prisma from '@/lib/db';
+import { protectedProcedure, router } from '../procedures';
+import * as z from 'zod';
+import { TRPCError } from '@trpc/server';
 
 export const workspaceRouter = router({
   getWorkspaces: protectedProcedure.query(async ({ ctx }) => {
@@ -15,14 +15,23 @@ export const workspaceRouter = router({
           userId,
         },
         include: {
-          forms: true,
+          forms: {
+            select: {
+              id: true,
+              formName: true,
+              createdAt: true,
+              updatedAt: true,
+              formType: true,
+              workspaceId: true,
+            },
+          },
         },
         orderBy: {
-          createdAt: "asc",
+          createdAt: 'asc',
         },
       });
     } catch (error) {
-      throw new TRPCError({ code: "NOT_FOUND" });
+      throw new TRPCError({ code: 'NOT_FOUND' });
     }
 
     return userWorkspaces;
@@ -46,7 +55,7 @@ export const workspaceRouter = router({
           },
         });
       } catch (error) {
-        throw new TRPCError({ code: "NOT_FOUND" });
+        throw new TRPCError({ code: 'NOT_FOUND' });
       }
 
       return workspace;
@@ -67,7 +76,7 @@ export const workspaceRouter = router({
           },
         });
       } catch (error) {
-        throw new TRPCError({ code: "UNPROCESSABLE_CONTENT" });
+        throw new TRPCError({ code: 'UNPROCESSABLE_CONTENT' });
       }
 
       return createdWorkspace;
@@ -99,7 +108,7 @@ export const workspaceRouter = router({
           },
         });
       } else {
-        throw new TRPCError({ code: "NOT_FOUND" });
+        throw new TRPCError({ code: 'NOT_FOUND' });
       }
 
       return updatedWorkspace;
@@ -128,7 +137,7 @@ export const workspaceRouter = router({
           },
         });
       } else {
-        throw new TRPCError({ code: "NOT_FOUND" });
+        throw new TRPCError({ code: 'NOT_FOUND' });
       }
 
       return deletedWorkspace;
