@@ -1,8 +1,8 @@
-import prisma from '@/lib/db';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { AuthOptions } from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import TwitterProvider from 'next-auth/providers/twitter';
+import prisma from "@/lib/db";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { AuthOptions } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import TwitterProvider from "next-auth/providers/twitter";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -14,12 +14,12 @@ export const authOptions: AuthOptions = {
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID as string,
       clientSecret: process.env.TWITTER_CLIENT_SECRET as string,
-      version: '2.0',
+      version: "2.0",
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   callbacks: {
     jwt: async ({ token, profile }) => {
@@ -50,7 +50,7 @@ export const authOptions: AuthOptions = {
             userId: user.id,
           },
           orderBy: {
-            createdAt: 'asc',
+            createdAt: "asc",
           },
         });
 
@@ -58,7 +58,7 @@ export const authOptions: AuthOptions = {
         if (!workspaces) {
           await prisma.workspace.create({
             data: {
-              workspaceName: 'Demo workspace',
+              workspaceName: "Demo workspace",
               userId: user.id,
               isDemo: true,
             },
@@ -68,5 +68,5 @@ export const authOptions: AuthOptions = {
       return true;
     },
   },
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === "development",
 };

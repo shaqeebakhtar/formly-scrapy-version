@@ -15,17 +15,7 @@ import FormFieldType from './form-field-type';
 
 interface FormFieldProps extends React.HTMLAttributes<HTMLDivElement> {
   provided: DraggableProvided;
-  item: {
-    fieldId: string;
-    fieldQuestion: string;
-    fieldType: string;
-    required?: boolean;
-    placeholder?: string;
-    rows?: number;
-    minChars?: number;
-    maxChars?: number;
-    options?: string[];
-  };
+  item: { fieldId: string; fieldQuestion: string; fieldType: string };
   index: number;
   handlers: UseListStateHandlers<{
     fieldId: string;

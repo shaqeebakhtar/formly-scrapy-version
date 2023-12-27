@@ -51,20 +51,12 @@ model Workspace {
 }
 
 model Form {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   formName    String
   formType    String?
-  formFields  Json?
-  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+  responses   Int
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
   workspaceId String
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  responses   Response[]
-}
-
-model Response {
-  id       String @id @default(cuid())
-  formId   String
-  response Json
-  form     Form   @relation(fields: [formId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
