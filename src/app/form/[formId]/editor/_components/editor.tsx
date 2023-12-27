@@ -10,40 +10,11 @@ import { useListState } from '@mantine/hooks';
 import React, { useEffect } from 'react';
 import FormField from './form-field';
 import FormMetaData from './form-meta-data';
-import { useParams } from 'next/navigation';
-import { trpc } from '@/utils/trpc';
 
 interface EditorProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function Editor({ className }: EditorProps) {
   const { formFields, setFormFields } = useFormFields((state) => state);
-  const { setFormTitle, setFormDescription } = useEditorFormStore(
-    (state) => state
-  );
-
-  const params = useParams();
-
-  const formDetailsQuery = trpc.form.getFormDetails.useQuery({
-    formId: params.formId as string,
-  });
-
-  useEffect(() => {
-    if (formDetailsQuery.isSuccess && formDetailsQuery.data) {
-      const formDetails = JSON.parse(formDetailsQuery.data);
-      if (formDetails && formDetails.fields) {
-        setFormTitle(formDetails.formTitle);
-        setFormDescription(formDetails.formDescription);
-        setFormFields(formDetails?.fields);
-      }
-    }
-  }, [
-    setFormFields,
-    formDetailsQuery.data,
-    formDetailsQuery.isSuccess,
-    setFormTitle,
-    setFormDescription,
-  ]);
-
   const [state, handlers] = useListState(formFields);
 
   const { formSubmitText } = useEditorFormStore((state) => state);
@@ -73,7 +44,7 @@ export default function Editor({ className }: EditorProps) {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {formFields?.map((item, index) => (
+                  {formFields.map((item, index) => (
                     <Draggable
                       key={item.fieldId}
                       index={index}

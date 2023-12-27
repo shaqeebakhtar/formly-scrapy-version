@@ -5,12 +5,6 @@ type UseFormFieldsState = {
     fieldId: string;
     fieldQuestion: string;
     fieldType: string;
-    required?: boolean;
-    placeholder?: string;
-    rows?: number;
-    minChars?: number;
-    maxChars?: number;
-    options?: string[];
   }[];
 };
 

@@ -1,8 +1,7 @@
-import { TRPCError } from '@trpc/server';
-import { protectedProcedure, publicProcedure, router } from '../procedures';
-import * as z from 'zod';
-import prisma from '@/lib/db';
-import { Prisma } from '@prisma/client';
+import { TRPCError } from "@trpc/server";
+import { protectedProcedure, router } from "../procedures";
+import * as z from "zod";
+import prisma from "@/lib/db";
 
 export const formRouter = router({
   createForm: protectedProcedure
@@ -21,10 +20,11 @@ export const formRouter = router({
             formName: input.formName,
             formType: input.formType,
             workspaceId: input.workspaceId,
+            responses: 0,
           },
         });
       } catch (error) {
-        throw new TRPCError({ code: 'UNPROCESSABLE_CONTENT' });
+        throw new TRPCError({ code: "UNPROCESSABLE_CONTENT" });
       }
 
       return createdForm;
@@ -55,115 +55,9 @@ export const formRouter = router({
           },
         });
       } else {
-        throw new TRPCError({ code: 'NOT_FOUND' });
+        throw new TRPCError({ code: "NOT_FOUND" });
       }
 
       return deletedForm;
-    }),
-
-  addFormDetails: protectedProcedure
-    .input(
-      z.object({
-        formId: z.string(),
-        formTitle: z.string(),
-        formDescription: z.string().optional(),
-        formSubmitText: z.string().optional(),
-        buttonAlignment: z.string().optional(),
-        fields: z.array(
-          z.object({
-            fieldId: z.string(),
-            fieldQuestion: z.string(),
-            fieldType: z.string(),
-            required: z.boolean().optional(),
-            placeholder: z.string().optional(),
-            rows: z.number().optional(),
-            minChars: z.number().optional(),
-            maxChars: z.number().optional(),
-            options: z.array(z.string()).optional(),
-          })
-        ),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      // check if workspace exists
-      const formExists = await prisma.form.findFirst({
-        where: {
-          id: input.formId,
-        },
-      });
-
-      let updatedForm;
-
-      if (formExists) {
-        updatedForm = await prisma.form.update({
-          where: {
-            id: input.formId,
-          },
-          data: {
-            formFields: {
-              formTitle: input.formTitle,
-              formDescription: input.formDescription,
-              formSubmitText: input.formSubmitText,
-              buttonAlignment: input.buttonAlignment,
-              fields: input.fields as Prisma.JsonArray,
-            } as Prisma.JsonObject,
-          },
-        });
-      } else {
-        throw new TRPCError({ code: 'NOT_FOUND' });
-      }
-
-      return updatedForm;
-    }),
-
-  getFormDetails: publicProcedure
-    .input(z.object({ formId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const formDetails = await prisma.form.findFirst({
-        where: {
-          id: input.formId,
-        },
-      });
-
-      return JSON.stringify(formDetails?.formFields);
-    }),
-
-  saveFormResponse: publicProcedure
-    .input(
-      z.object({
-        formId: z.string(),
-        response: z.any(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const savedResponse = await prisma.response.create({
-        data: {
-          formId: input.formId,
-          response: input.response,
-        },
-      });
-
-      return savedResponse;
-    }),
-
-  getFormResponses: protectedProcedure
-    .input(
-      z.object({
-        formId: z.string(),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const responses = await prisma.response.findMany({
-        where: {
-          formId: input.formId,
-        },
-        select: {
-          response: true,
-        },
-      });
-
-      const responseData = responses.map((response) => response.response);
-
-      return JSON.stringify(responseData);
     }),
 });
