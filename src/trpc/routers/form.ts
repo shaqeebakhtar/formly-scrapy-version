@@ -145,4 +145,25 @@ export const formRouter = router({
 
       return savedResponse;
     }),
+
+  getFormResponses: protectedProcedure
+    .input(
+      z.object({
+        formId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const responses = await prisma.response.findMany({
+        where: {
+          formId: input.formId,
+        },
+        select: {
+          response: true,
+        },
+      });
+
+      const responseData = responses.map((response) => response.response);
+
+      return JSON.stringify(responseData);
+    }),
 });
