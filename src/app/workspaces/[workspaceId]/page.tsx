@@ -18,7 +18,8 @@ export default function Page() {
   );
 
   if (!user || !user.id) {
-    router.push('/auth/login?callback=unauthorized');
+    typeof window !== 'undefined' &&
+      router.push('/auth/login?callback=unauthorized');
   }
 
   return (
