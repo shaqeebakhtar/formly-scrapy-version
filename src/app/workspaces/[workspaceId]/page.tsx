@@ -14,7 +14,7 @@ type User = {
 export default function Page() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(
-    JSON.parse(localStorage.getItem('user')!)
+    typeof window !== 'undefined' && JSON.parse(localStorage.getItem('user')!)
   );
 
   if (!user || !user.id) {

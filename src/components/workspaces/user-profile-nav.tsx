@@ -26,7 +26,7 @@ type User = {
 export default function UserProfileNav({}: UserProfileNavProps) {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(
-    JSON.parse(localStorage.getItem('user')!)
+    typeof window !== 'undefined' && JSON.parse(localStorage.getItem('user')!)
   );
 
   const logoutMutation = trpc.auth.logout.useMutation();
