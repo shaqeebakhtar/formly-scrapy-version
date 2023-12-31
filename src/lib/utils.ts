@@ -2,6 +2,7 @@ import * as z from 'zod';
 
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import crypto from 'crypto';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -40,4 +41,11 @@ export const createSchema = (question: string, type: string) => {
   };
 
   return z.object(obj);
+};
+
+export const generateHash = (input: string) => {
+  return crypto
+    .createHmac('sha256', process.env.HASH_SECRET as string)
+    .update(input)
+    .digest('hex');
 };

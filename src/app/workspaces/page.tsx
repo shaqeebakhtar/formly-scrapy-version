@@ -1,17 +1,23 @@
-import OnboardLoading from "@/components/workspaces/onboard-loading";
-import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+'use client';
+import OnboardLoading from '@/components/workspaces/onboard-loading';
+import useUser from '@/hooks/use-user';
+import { useAuth } from '@/store/auth';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-export const metadata: Metadata = {
-  title: "Formly | Workspaces",
+type User = {
+  id: string;
+  email: string;
 };
 
-export default async function page() {
-  const session = await getServerSession();
+export default function Page() {
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(
+    JSON.parse(localStorage.getItem('user')!)
+  );
 
-  if (!session || !session?.user) {
-    redirect("/auth/login?callback=unauthorized");
+  if (!user || !user.id) {
+    router.push('/auth/login?callback=unauthorized');
   }
 
   return <OnboardLoading />;
