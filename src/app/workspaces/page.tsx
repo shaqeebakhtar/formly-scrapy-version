@@ -1,9 +1,7 @@
 'use client';
 import OnboardLoading from '@/components/workspaces/onboard-loading';
-import useUser from '@/hooks/use-user';
-import { useAuth } from '@/store/auth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type User = {
   id: string;

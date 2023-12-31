@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import { publicProcedure, router } from '../procedures';
+import { protectedProcedure, publicProcedure, router } from '../procedures';
 import { generateHash } from '@/lib/utils';
 import prisma from '@/lib/db';
 import { TRPCError } from '@trpc/server';
@@ -103,4 +103,11 @@ export const authRouter = router({
 
       return { id: user.id, email: user.email };
     }),
+
+  logout: protectedProcedure.mutation(() => {
+    const cookieStore = cookies();
+    cookieStore.delete('access_token');
+
+    return { user: null };
+  }),
 });
