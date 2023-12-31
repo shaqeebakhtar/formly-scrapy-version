@@ -64,7 +64,7 @@ export const workspaceRouter = router({
   createWorkspace: protectedProcedure
     .input(z.object({ workspaceName: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx?.user.id;
+      const userId = ctx?.user.id as string;
 
       let createdWorkspace = null;
 

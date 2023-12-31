@@ -1,20 +1,25 @@
-import WorkspacesSidebar from "@/components/workspaces/sidebar";
-import WorkSpacesTopbar from "@/components/workspaces/topbar";
-import CreatedFormsGroup from "@/components/workspaces/workspace/created-forms-group";
-import WorkspaceHeader from "@/components/workspaces/workspace/header";
-import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+'use client';
+import WorkspacesSidebar from '@/components/workspaces/sidebar';
+import WorkSpacesTopbar from '@/components/workspaces/topbar';
+import CreatedFormsGroup from '@/components/workspaces/workspace/created-forms-group';
+import WorkspaceHeader from '@/components/workspaces/workspace/header';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-export const metadata: Metadata = {
-  title: "Formly | Workspaces",
+type User = {
+  id: string;
+  email: string;
 };
 
-export default async function page() {
-  const session = await getServerSession();
+export default function Page() {
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(
+    typeof window !== 'undefined' && JSON.parse(localStorage.getItem('user')!)
+  );
 
-  if (!session || !session?.user) {
-    redirect("/auth/login?callback=unauthorized");
+  if (!user || !user.id) {
+    typeof window !== 'undefined' &&
+      router.push('/auth/login?callback=unauthorized');
   }
 
   return (

@@ -1,14 +1,14 @@
-import { Metadata } from "next";
+import { Metadata } from 'next';
 
-import AuthDisplay from "@/components/auth/auth-display";
-import SkipAuth from "@/components/auth/skip-auth";
-import { UserAuthForm } from "@/components/auth/user-auth-form";
-import { Icons } from "@/components/icons";
-import ToastNotification from "@/components/toast-notification";
+import AuthDisplay from '@/components/auth/auth-display';
+import SkipAuth from '@/components/auth/skip-auth';
+import { UserAuthForm } from '@/components/auth/user-auth-form';
+import { Icons } from '@/components/icons';
+import ToastNotification from '@/components/toast-notification';
 
 export const metadata: Metadata = {
-  title: "Formly | Login",
-  description: "Login and continue where you left off",
+  title: 'Formly | Login',
+  description: 'Login and continue where you left off',
 };
 
 export default function LoginPage() {

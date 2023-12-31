@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,20 +10,31 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { getInitials } from "@/lib/utils";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+} from '@/components/ui/dropdown-menu';
+import { getInitials } from '@/lib/utils';
+import { trpc } from '@/utils/trpc';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type UserProfileNavProps = {};
 
+type User = {
+  id: string;
+  email: string;
+};
+
 export default function UserProfileNav({}: UserProfileNavProps) {
   const router = useRouter();
-  const { data: session } = useSession();
+  const [user, setUser] = useState<User | null>(
+    typeof window !== 'undefined' && JSON.parse(localStorage.getItem('user')!)
+  );
+
+  const logoutMutation = trpc.auth.logout.useMutation();
 
   const logOutUser = async () => {
-    const data = await signOut({ redirect: false, callbackUrl: "/auth/login" });
-    router.push(data.url);
+    localStorage.removeItem('user');
+    logoutMutation.mutate();
+    router.push('/auth/login');
   };
 
   return (
@@ -32,9 +43,8 @@ export default function UserProfileNav({}: UserProfileNavProps) {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-9 w-9">
-              <AvatarImage src={session?.user.image as string} alt="" />
               <AvatarFallback className="font-semibold">
-                {getInitials(session?.user.name as string)}
+                {getInitials(user?.email?.split('@')[0] as string)}
               </AvatarFallback>
             </Avatar>
           </Button>
@@ -42,12 +52,7 @@ export default function UserProfileNav({}: UserProfileNavProps) {
         <DropdownMenuContent className="w-56" align="end">
           <DropdownMenuLabel>
             <div className="flex flex-col space-y-2">
-              <p className="text-sm font-medium leading-none capitalize">
-                {session?.user.name}
-              </p>
-              <p className="text-xs font-normal leading-none text-muted-foreground">
-                {session?.user.email}
-              </p>
+              <p className="text-sm font-medium leading-none">{user?.email}</p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />

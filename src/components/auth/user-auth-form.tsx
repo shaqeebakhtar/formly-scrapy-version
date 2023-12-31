@@ -2,9 +2,10 @@
 
 import { Icons } from '@/components/icons';
 import { authSchema } from '@/schemas/auth';
+import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Button } from '../ui/button';
@@ -17,31 +18,41 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import UserSocialAuth from './user-social-auth';
 
 type UserAuthFormProps = {
   formType: 'login' | 'signup';
 };
 
 export function UserAuthForm({ formType }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
+  const router = useRouter();
   const form = useForm<z.infer<typeof authSchema>>({
     resolver: zodResolver(authSchema),
   });
 
+  const singupMutation = trpc.auth.signup.useMutation({
+    onSuccess: (variables) => {
+      localStorage.setItem('user', JSON.stringify(variables));
+      router.push('/workspaces');
+    },
+  });
+
+  const loginMutation = trpc.auth.login.useMutation({
+    onSuccess: (variables) => {
+      localStorage.setItem('user', JSON.stringify(variables));
+      router.push('/workspaces');
+    },
+  });
+
   async function onSubmit(data: z.infer<typeof authSchema>) {
-    setIsLoading(true);
-    console.log(data);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    formType === 'signup'
+      ? singupMutation.mutate(data)
+      : loginMutation.mutate(data);
   }
 
   return (
     <div className="grid gap-6">
-      <UserSocialAuth />
-      <div className="relative">
+      {/* <UserSocialAuth /> */}
+      {/* <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
         </div>
@@ -50,7 +61,7 @@ export function UserAuthForm({ formType }: UserAuthFormProps) {
             Or continue with
           </span>
         </div>
-      </div>
+      </div> */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-4">
@@ -83,8 +94,8 @@ export function UserAuthForm({ formType }: UserAuthFormProps) {
               />
             </div>
             <div className="grid gap-2">
-              <Button disabled={isLoading}>
-                {isLoading && (
+              <Button disabled={singupMutation.isLoading}>
+                {singupMutation.isLoading && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 {formType === 'signup'
