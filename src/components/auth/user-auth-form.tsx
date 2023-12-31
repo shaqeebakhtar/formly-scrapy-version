@@ -2,9 +2,10 @@
 
 import { Icons } from '@/components/icons';
 import { authSchema } from '@/schemas/auth';
+import { trpc } from '@/utils/trpc';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Button } from '../ui/button';
@@ -17,10 +18,6 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import UserSocialAuth from './user-social-auth';
-import { trpc } from '@/utils/trpc';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/store/auth';
 
 type UserAuthFormProps = {
   formType: 'login' | 'signup';
